@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1>Feed</h1>
+
+
+{% for post in posts %}
+<!-- Make this go to a specific post -->
+<a href="{% url 'post' username=post.author.username pk=post.id  %}">
+  <p>by {{ post.author }}</p> 
+  <p>{{ post.body }}</p>
+  <p>{{ post.reply_count }} replies</p>
+  <hr>
+</a>
+
+
+{% endfor %}
+
+{% endblock content %}

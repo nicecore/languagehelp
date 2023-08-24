@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<form class="form" action="" method="POST">
+  {% csrf_token %}
+  <div class="form__group">
+    <label for="body">Write something...</label>
+    <textarea name="body" id="body" placeholder="Make a post already..."></textarea>
+  </div>
+
+  <div class="form__action">
+    <a class="btn btn--dark" href="{% url 'home' %}">Cancel</a>
+    <button class="btn btn--main" type="submit">Submit</button>
+  </div>
+</form>
+{% endblock %}

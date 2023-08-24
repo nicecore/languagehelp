@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<p>@{{ post.author }}</p>
+<p>{{ post.body }}</p>
+<p>{{ post.reply_count }} replies</p>
+{% if request.user == post.author %}
+  <a href="{% url 'delete-post' post.id %}">Delete</a>
+{% endif %}
+<hr>
+{% for reply in post_replies %}
+  <p>{{ reply.author }}</p>
+  <p>{{ reply.body }}</p>
+  {% if request.user == reply.author %}
+    <a href="{% url 'delete-reply' reply.id %}">Delete</a>
+  {% endif %}
+{% endfor %}
+<hr>
+{% if user.is_authenticated %}
+
+<form class="form" action="" method="POST">
+  {% csrf_token %}
+  <div class="form__group">
+    <label for="body">Write something...</label>
+    <textarea name="body" id="body" placeholder="Make a post already..."></textarea>
+  </div>
+  <div class="form__action">
+    <a class="btn btn--dark" href="{% url 'home' %}">Cancel</a>
+    <button class="btn btn--main" type="submit">Submit</button>
+  </div>
+</form>
+
+{% endif %}
+{% endblock content %}
