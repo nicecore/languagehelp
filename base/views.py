@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 
+from .langs_list import langs_list_str
+
 """
 TODOS:
 
@@ -61,6 +63,7 @@ def home(request):
 def post(request, username, pk):
     post = Post.objects.get(id=pk)
     post_replies = post.replies.all()
+    
 
     if request.method == 'POST':
         reply = Reply.objects.create(
@@ -75,19 +78,26 @@ def post(request, username, pk):
         'post': post,
         'post_replies': post_replies
     }
+    
     return render(request, 'base/post.html', context)
 
 
 @login_required(login_url='login')
 def createPost(request):
+    langs_list = langs_list_str.split(',')
+
     form = PostForm()
     if request.method == 'POST':
         Post.objects.create(
             author = request.user,
             body = request.POST.get('body')
+            
         )
         return redirect('home')
-    context = {'form': form}
+    context = {
+        'form': form,
+        'langs_list': langs_list
+    }
     return render(request, 'base/new_post.html', context)
 
 

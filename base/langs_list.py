@@ -1,10 +1,13 @@
+langs_list = []
+
+language_data = """
 Pashto - پښتو
 Uzbek - Oʻzbek
 Turkmen - Türkmen
 Swedish - svenska
 Albanian - Shqip
 Arabic - العربية
-English - English
+English - 
 Samoan - gagana fa'a Samoa
 Catalan - català
 Portuguese - Português
@@ -121,3 +124,13 @@ Bislama - Bislama
 Vietnamese - Tiếng Việt
 Shona - chiShona
 Northern Ndebele - isiNdebele
+"""
+
+language_lines = language_data.strip().split('\n')
+
+for line in language_lines:
+    english_name, native_name = line.split(' - ')
+    langs_list.append(english_name.strip())
+    langs_list.append(native_name.strip())
+
+langs_list_str = ", ".join(langs_list)
