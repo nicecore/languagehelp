@@ -14,29 +14,22 @@ How the list is supposedly being retrieved currently:
 
  -->
 
+{% if error_message %}
+<p>{{ error_message }}</p>
 
+{% endif %}
 
 <form class="form" action="" method="POST">
   {% csrf_token %}
   <div class="form__group">
-    <label for="body">Choose a language</label>
-    <input type="text" class="awesomplete" list="languages" name="language" />
+    <label for="language">Choose a language</label>
+    <input id="lang-picker" type="text" class="awesomplete" list="languages" name="language" />
     <datalist id="languages">
       {% for lang in langs_list %}
         <option value="{{ lang }}">{{ lang }}</option>
       {% endfor %}
     </datalist>
   </div>
-
-  <div class="form__action">
-    <a class="btn btn--dark" href="{% url 'home' %}">Cancel</a>
-    <button class="btn btn--main" type="submit">Submit</button>
-  </div>
-</form>
-
-
-<form class="form" action="" method="POST">
-  {% csrf_token %}
   <div class="form__group">
     <label for="body">Write something...</label>
     <textarea name="body" id="body" placeholder="Make a post already..."></textarea>
@@ -47,4 +40,5 @@ How the list is supposedly being retrieved currently:
     <button class="btn btn--main" type="submit">Submit</button>
   </div>
 </form>
+
 {% endblock %}

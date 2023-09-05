@@ -126,6 +126,7 @@ Shona - chiShona
 Northern Ndebele - isiNdebele
 """
 
+
 language_lines = language_data.strip().split('\n')
 
 for line in language_lines:
@@ -133,4 +134,4 @@ for line in language_lines:
     langs_list.append(english_name.strip())
     langs_list.append(native_name.strip())
 
-langs_list_str = ", ".join(langs_list)
+langs_list_str = ",".join(langs_list)

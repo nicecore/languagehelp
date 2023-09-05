@@ -1,0 +1,11 @@
+
+/* Hide the down arrow in Firefox on hover */
+input#lang-picker.awesomplete:hover::-moz-calendar-picker-indicator {
+  display: none;
+}
+
+
+
+input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}

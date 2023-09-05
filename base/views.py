@@ -2,11 +2,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Post, Reply
+from .models import Post, Reply, Language
 from .forms import PostForm, UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
 
 from .langs_list import langs_list_str
 
@@ -85,20 +86,37 @@ def post(request, username, pk):
 @login_required(login_url='login')
 def createPost(request):
     langs_list = langs_list_str.split(',')
-
     form = PostForm()
     if request.method == 'POST':
+        body = request.POST.get('body')
+        language_input = request.POST.get('language')
+        print("Received language input:", language_input)
+        try:
+            language = Language.objects.get(
+                Q(name_english__icontains=language_input) | 
+                Q(name_native__icontains=language_input)
+            )
+            print(language)
+        except Language.DoesNotExist:
+            return render(request, 'base/new_post.html', {'form': form, 'error_message': 'Language not found'})
+
+        # Create the Post
         Post.objects.create(
-            author = request.user,
-            body = request.POST.get('body')
-            
+            author=request.user,
+            body=body,
+            language=language  # Assuming you have a 'language' field in your Post model to store the language
         )
         return redirect('home')
+    
     context = {
         'form': form,
         'langs_list': langs_list
     }
     return render(request, 'base/new_post.html', context)
+
+
+
+
 
 
 @login_required(login_url='login')
