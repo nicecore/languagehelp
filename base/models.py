@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
 
 # TODOS
 
@@ -26,6 +27,8 @@ class Post(models.Model):
     user_tags = models.CharField(max_length=255, blank=True)
     # Reply count logic
     reply_count = models.PositiveIntegerField(default=0)
+
+    tags = TaggableManager()
 
     def increment_reply_count(self):
         self.reply_count += 1
@@ -55,6 +58,8 @@ class Reply(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     body = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    tags = TaggableManager()
 
     # Many-to-one reference to Post; from Post objects can be referenced with 'replies'
     parent_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='replies')

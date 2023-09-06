@@ -9,6 +9,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 
+from taggit.models import Tag
+
 from .langs_list import langs_list_str
 
 """
@@ -88,24 +90,36 @@ def createPost(request):
     langs_list = langs_list_str.split(',')
     form = PostForm()
     if request.method == 'POST':
+
+        # Get post body
         body = request.POST.get('body')
+
+        # Get hashtags from post body
+        hashtags = [word.strip('#') for word in body.split() if word.startswith('#')]
+
+        # Get the language input
         language_input = request.POST.get('language')
-        print("Received language input:", language_input)
         try:
             language = Language.objects.get(
                 Q(name_english__icontains=language_input) | 
                 Q(name_native__icontains=language_input)
             )
-            print(language)
         except Language.DoesNotExist:
+            # Incorporate this into Django messages, notifications, etc.
             return render(request, 'base/new_post.html', {'form': form, 'error_message': 'Language not found'})
 
         # Create the Post
-        Post.objects.create(
+        post = Post.objects.create(
             author=request.user,
             body=body,
             language=language  # Assuming you have a 'language' field in your Post model to store the language
         )
+
+        for hashtag_text in hashtags:
+            hashtag, created = Tag.objects.get_or_create(name=hashtag_text)
+            post.tags.add(hashtag)
+
+
         return redirect('home')
     
     context = {

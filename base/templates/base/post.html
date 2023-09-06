@@ -3,6 +3,7 @@
 {% block content %}
 
 <p>@{{ post.author }}</p>
+<p>{{ post.language }}</p>
 <p>{{ post.body }}</p>
 <p>{{ post.reply_count }} replies</p>
 {% if request.user == post.author %}
