@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Post, Reply, Language
+from .models import Post, Reply, Language, Profile
 from .forms import PostForm, UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -84,6 +84,26 @@ def post(request, username, pk):
     
     return render(request, 'base/post.html', context)
 
+
+def profile(request, pk):
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user_id=pk)
+
+        if request.method == "POST":
+            # Get current user ID
+            current_user_profile = request.user.profile
+            action = request.POST['follow']
+            # Decide to follow or unfollow
+            if action == 'unfollow':
+                current_user_profile.follows.remove(profile)
+            elif action == 'follow':
+                current_user_profile.follows.add(profile)
+            # Save profile
+            current_user_profile.save()
+
+        return render(request, 'base/profile.html', {"profile": profile})
+    else:
+        return redirect('home')
 
 @login_required(login_url='login')
 def createPost(request):

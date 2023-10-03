@@ -2,7 +2,7 @@
   <h1>Logo</h1>
 </a>
 {% if request.user.is_authenticated %}
-<p>Hello, @{{ user }}</p>
+<p>Hello, @<a href="{% url 'profile' request.user.id %}">{{ request.user.username }}</a></p>
 <a href="{% url 'logout' %}">Logout</a>
 <a href="{% url 'create-post' %}">New Post</a>
 {% else %}

@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 
+from django.db.models.signals import post_save
+
+
 # TODOS
 
 """ 
@@ -9,6 +12,32 @@ Todos:
 
 
 """
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    follows = models.ManyToManyField(
+        "self",
+        related_name="followed_by",
+        symmetrical=False,
+        blank=True
+    )
+    def __str__(self):
+        return self.user.username
+
+# Create Profile when new user signs up
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile(user=instance)
+        user_profile.save()
+        # Make users follow themselves
+        user_profile.follows.set([instance.profile.id])
+        # Need to save again because there had to be a profile in order to call .set()
+        user_profile.save()
+
+
+post_save.connect(create_profile, sender=User)
+
 
 class Language(models.Model):
     name_english = models.CharField(max_length=100)
