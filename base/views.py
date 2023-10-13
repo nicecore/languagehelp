@@ -105,6 +105,17 @@ def profile(request, pk):
     else:
         return redirect('home')
 
+# For now just test to see if it works to render the language name etc.
+def language_profile(request, pk):
+    language = Language.objects.get(id=pk)
+    # Make this if block a new post tagged with that language
+    # if request.method == "POST":
+        
+    return render(request, 'base/language_profile.html', {"language": language})
+    # else:
+    #     return redirect('home')
+
+
 @login_required(login_url='login')
 def createPost(request):
     langs_list = langs_list_str.split(',')

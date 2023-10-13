@@ -2,11 +2,11 @@
 
 {% block content %}
 
-{% if profile %}
+<!-- {% if language %} -->
 
-<h1>{{ profile.user.username }}</h1>
+<h1>{{ language.name_english }} | {{ language.name_native }}</h1>
 
-<strong>Follows</strong><br>
+<!-- <strong>Follows</strong><br>
 {% for following in profile.follows.all %}
   <a href="{% url 'profile' following.user.id %}">@{{ following }}</a><br/>
 
@@ -39,6 +39,6 @@
       </button>
     {% endif %}
   {% endif %}
-</form>
+</form> -->
 
 {% endblock content %}

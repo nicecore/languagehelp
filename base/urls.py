@@ -11,4 +11,5 @@ urlpatterns = [
     path('create-post/', views.createPost, name="create-post"),
     path('delete-post/<str:pk>', views.deletePost, name="delete-post"),
     path('delete-reply/<str:pk>', views.deleteReply, name="delete-reply"),
+    path('language/<str:pk>', views.language_profile, name="language-profile"),
 ]

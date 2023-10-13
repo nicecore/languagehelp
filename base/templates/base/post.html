@@ -3,7 +3,9 @@
 {% block content %}
 
 <p>@{{ post.author }}</p>
-<p>{{ post.language }}</p>
+
+<a href="{% url 'language-profile' post.language.id %}"><p>{{ post.language }}</p></a>
+
 <p>{{ post.body }}</p>
 <p>{{ post.reply_count }} replies</p>
 {% if request.user == post.author %}

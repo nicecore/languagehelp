@@ -4,15 +4,12 @@ from taggit.managers import TaggableManager
 
 from django.db.models.signals import post_save
 
+class Language(models.Model):
+    name_english = models.CharField(max_length=100)
+    name_native = models.CharField(max_length=100)
 
-# TODOS
-
-""" 
-Todos:
-
-
-"""
-
+    def __str__(self):
+        return self.name_english
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -22,6 +19,7 @@ class Profile(models.Model):
         symmetrical=False,
         blank=True
     )
+    followed_languages = models.ManyToManyField(Language, related_name='followers', blank=True)
     def __str__(self):
         return self.user.username
 
@@ -37,15 +35,6 @@ def create_profile(sender, instance, created, **kwargs):
 
 
 post_save.connect(create_profile, sender=User)
-
-
-class Language(models.Model):
-    name_english = models.CharField(max_length=100)
-    name_native = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name_english
-
 
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
