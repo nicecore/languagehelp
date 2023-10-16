@@ -18,6 +18,7 @@ class Profile(models.Model):
         related_name="followed_by",
         symmetrical=False,
         blank=True
+        
     )
     followed_languages = models.ManyToManyField(Language, related_name='followers', blank=True)
     def __str__(self):
